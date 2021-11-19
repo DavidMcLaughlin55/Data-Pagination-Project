@@ -78,19 +78,17 @@ searchStudents Function
 function searchStudents(list) {
    let studentMatches = [];
    for (let i = 0; i < list.length; i++) {
-      if (list[i].name.first.toLowerCase().includes(searchInput.value.toLowerCase()) ||
-         list[i].name.last.toLowerCase().includes(searchInput.value.toLowerCase())) {
+      const name = list[i].name.first.toLowerCase() + list[i].name.last.toLowerCase();
+      if (name.includes(searchInput.value.toLowerCase())) {
          studentMatches.push(list[i]);
-         console.log(studentMatches);
-         return studentMatches;
       };
    };
-   console.log(studentMatches);
    showPage(studentMatches, 1);
    addPagination(studentMatches);
 };
 
 searchInput.addEventListener('keyup', () => { searchStudents(data) });
+searchSubmitBtn.addEventListener('click', () => { searchStudents(data) });
 
 // CALL FUNCTIONS
 showPage(data, 1);
