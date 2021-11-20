@@ -54,14 +54,15 @@ function addPagination(list) {
    for (let i = 1; i <= numOfPages; i++) {
       const button =
          `<li>
-      <button type="button">${i}</button>
-      </li>`;
+          <button type="button">${i}</button>
+          </li>`;
       linkList.insertAdjacentHTML('beforeend', button);
-      document.querySelector('button').className = 'active';
+      const firstBtn = document.querySelector('button:first-child');
+      firstBtn.className = 'active';
       linkList.addEventListener('click', (e) => {
          if (e.target.tagName === 'BUTTON') {
-            let active = document.querySelector('.active');
-            active.className = '';
+            let activeBtn = document.querySelector('.active');
+            activeBtn.className = '';
             e.target.className = 'active';
             showPage(list, e.target.textContent);
          };
@@ -90,6 +91,7 @@ function searchStudents(list) {
                   <h1>No Results Found</h1>
                </div>`;
          studentList.insertAdjacentHTML('beforeend', noResults);
+         addPagination(0);
       };
    };
 };
