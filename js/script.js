@@ -7,6 +7,7 @@ const searchBar = `<label for="search" class="student-search">
 <input id="search" placeholder="Search by name...">
 <button id ="search-button" type="button"><img src="img/icn-search.svg" alt="Search icon"></button>
 </label>`;
+const studentList = document.querySelector('.student-list');
 
 /* SearchBar Feature */
 const header = document.querySelector('.header');
@@ -23,21 +24,20 @@ showPage Function
 function showPage(list, page) {
    const startIndex = (page * itemsPerPage) - itemsPerPage;
    const endIndex = page * itemsPerPage;
-   const studentList = document.querySelector('.student-list');
    studentList.innerHTML = '';
    for (let i = 0; i < list.length; i++) {
       if (i >= startIndex && i < endIndex) {
          const studentDisplay =
             `<li class="student-item cf">
-         <div class="student-details">
-           <img class="avatar" src= ${list[i].picture.medium} alt="Profile Picture">
-           <h3>${list[i].name.first} ${list[i].name.last}</h3>
-           <span class="email">${list[i].email}</span>
-         </div>
-         <div class="joined-details">
-           <span class="date">Joined ${list[i].registered.date}</span>
-         </div>
-         </li>`;
+               <div class="student-details">
+                  <img class="avatar" src= ${list[i].picture.medium} alt="Profile Picture">
+                  <h3>${list[i].name.first} ${list[i].name.last}</h3>
+                  <span class="email">${list[i].email}</span>
+               </div>
+                  <div class="joined-details">
+                  <span class="date">Joined ${list[i].registered.date}</span>
+               </div>
+               </li>`;
          studentList.insertAdjacentHTML('beforeend', studentDisplay);
       };
    };
@@ -60,7 +60,6 @@ function addPagination(list) {
       document.querySelector('button').className = 'active';
       linkList.addEventListener('click', (e) => {
          if (e.target.tagName === 'BUTTON') {
-            console.log(e.target.tagName);
             let active = document.querySelector('.active');
             active.className = '';
             e.target.className = 'active';
@@ -78,15 +77,24 @@ searchStudents Function
 function searchStudents(list) {
    let studentMatches = [];
    for (let i = 0; i < list.length; i++) {
+      let results = studentMatches;
       const name = list[i].name.first.toLowerCase() + list[i].name.last.toLowerCase();
       if (name.includes(searchInput.value.toLowerCase())) {
          studentMatches.push(list[i]);
+         showPage(studentMatches, 1);
+         addPagination(studentMatches);
+      } else if (studentMatches.length === 0) {
+         studentList.innerHTML = '';
+         let noResults =
+            `  <div class="no-results">
+                  <h1>No Results Found</h1>
+               </div>`;
+         studentList.insertAdjacentHTML('beforeend', noResults);
       };
    };
-   showPage(studentMatches, 1);
-   addPagination(studentMatches);
 };
 
+//EVENT LISTENERS
 searchInput.addEventListener('keyup', () => { searchStudents(data) });
 searchSubmitBtn.addEventListener('click', () => { searchStudents(data) });
 
